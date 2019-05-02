@@ -36,6 +36,11 @@ export default class register extends Component {
             [name]: val
         })
     }
+    // 10.2 toLogin方法,this.props.history.replace跳转
+    toLogin = () => {
+        this.props.history.replace('/login')
+    }
+
     render() {
         // 9.2.3 读state的type的值,注意书写位置,写在render里面,return外面
         const { type } = this.state
@@ -74,7 +79,8 @@ export default class register extends Component {
                         {/* 5.6 两个按钮 */}
                         <Button type='primary' onClick={this.register}>注&nbsp;&nbsp;&nbsp;册</Button>
                         <WhiteSpace />
-                        <Button>已有账户</Button>
+                        {/* 10.1 点击 已有账户 按钮跳到 login 界面 */}
+                        <Button onClick={this.toLogin}>已有账户</Button>
                     </List>
                 </WingBlank>
             </div>
