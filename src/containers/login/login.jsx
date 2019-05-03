@@ -16,8 +16,8 @@ import Logo from '../../components/logo/logo'
 export default class login extends Component {
     // 6. 设置state
     state = {
-        userName: '', // 用户名
-        passwd: '', // 密码
+        username: '', // 用户名
+        password: '', // 密码
     }
     login = () => {
         console.log(this.state);
@@ -48,10 +48,10 @@ export default class login extends Component {
                         {/* 5.2 嵌套InputItem */}
                         <WhiteSpace />
                         {/* 7. 各个state元素的onChange事件,参考文档 会传递一个value,变化的值; 交给handleChange */}
-                        <InputItem placeholder='请输入用户名' onChange={val => { this.handleChange('userName', val) }}>用户名:</InputItem>
+                        <InputItem placeholder='请输入用户名' onChange={val => { this.handleChange('username', val) }}>用户名:</InputItem>
                         {/* 5.3 间隔 */}
                         <WhiteSpace />
-                        <InputItem placeholder='请输入密码' type='password' onChange={val => { this.handleChange('passwd', val) }}>密&nbsp;&nbsp;&nbsp;码:</InputItem>
+                        <InputItem placeholder='请输入密码' type='password' onChange={val => { this.handleChange('password', val) }}>密&nbsp;&nbsp;&nbsp;码:</InputItem>
                         <WhiteSpace />
                         {/* 5.6 两个按钮 */}
                         <Button type='primary' onClick={this.login}>登&nbsp;&nbsp;&nbsp;录</Button>
