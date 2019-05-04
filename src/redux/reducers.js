@@ -17,7 +17,7 @@ const initUser = {
 function user(state = initUser, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return { ...state, ...action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+            return { ...action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         case ERR_MESSAGE:
             return { ...state, msg: action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         default:
