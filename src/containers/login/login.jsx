@@ -13,15 +13,19 @@ import {
 // 4.1 引入Logo组件
 import Logo from '../../components/logo/logo'
 
-export default class login extends Component {
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { login } from '../../redux/actions'
+
+class Login extends Component {
     // 6. 设置state
     state = {
         username: '', // 用户名
         password: '', // 密码
     }
     login = () => {
-        console.log(this.state);
-
+        // console.log(this.state);
+        this.props.login(this.state)
     }
     // 8. handleChange函数,[name]要加中括号取变量的值, setState
     handleChange(name, val) {
@@ -35,6 +39,10 @@ export default class login extends Component {
     }
 
     render() {
+        const { msg, redirectTo } = this.props.user
+        if (redirectTo) {
+            return <Redirect to={redirectTo} />
+        }
         return (
             <div>
                 {/* 3. 硅谷直聘顶部导航栏 */}
@@ -45,6 +53,7 @@ export default class login extends Component {
                 <WingBlank>
                     {/* 5.1 嵌套List */}
                     <List>
+                        {msg ? <div className='err-msg'>{msg}</div> : null}
                         {/* 5.2 嵌套InputItem */}
                         <WhiteSpace />
                         {/* 7. 各个state元素的onChange事件,参考文档 会传递一个value,变化的值; 交给handleChange */}
@@ -64,3 +73,8 @@ export default class login extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({ user: state.user }),
+    { login }
+)(Login)

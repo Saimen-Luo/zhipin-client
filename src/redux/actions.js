@@ -3,7 +3,7 @@
 同步action
 异步action
 */
-import { reqRegister } from '../api'
+import { reqRegister, reqLogin } from '../api'
 import {
     AUTH_SUCCESS,
     ERR_MESSAGE
@@ -20,9 +20,9 @@ export const register = (user) => {
     // 表单前台验证
     if (!username) {
         return errMessage('用户名不能为空')
-    }else if (!password) {
+    } else if (!password) {
         return errMessage('密码不能为空')
-    }else if (password !== password2) {
+    } else if (password !== password2) {
         return errMessage('密码和确认密码不一致！')
     }
 
@@ -30,6 +30,31 @@ export const register = (user) => {
     return async dispatch => {
         // 不传递password2，后台不需要
         const response = await reqRegister({ username, password, type })
+        const result = response.data
+        if (result.code === 0) {
+            // 分发授权成功的同步action
+            dispatch(authSuccess(result.data))
+        } else {
+            // 分发错误提示的同步action
+            dispatch(errMessage(result.msg))
+        }
+    }
+}
+
+// 登录异步action
+export const login = (user) => {
+    const { username, password } = user
+    // 表单前台验证
+    if (!username) {
+        return errMessage('用户名不能为空')
+    } else if (!password) {
+        return errMessage('密码不能为空')
+    }
+
+    // 表单前台验证成功，返回一个发ajax请求的异步action
+    return async dispatch => {
+        // 不传递password2，后台不需要
+        const response = await reqLogin({ username, password })
         const result = response.data
         if (result.code === 0) {
             // 分发授权成功的同步action
