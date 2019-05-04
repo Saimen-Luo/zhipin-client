@@ -20,7 +20,7 @@ export const register = (user) => {
         const result = response.data
         if (result.code === 0) {
             // 分发授权成功的同步action
-            dispatch(authSuccessz(result.data))
+            dispatch(authSuccess(result.data))
         } else {
             // 分发错误提示的同步action
             dispatch(errMessage(result.msg))

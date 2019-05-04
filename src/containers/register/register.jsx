@@ -11,13 +11,16 @@ import {
     Radio,
     Button
 } from 'antd-mobile'
+import { connect } from 'react-redux'
+
 // 4.1 引入Logo组件
 import Logo from '../../components/logo/logo'
+import { register } from '../../redux/actions'
 
 // 2. ListItem是List中的Item
 const ListItem = List.Item
 
-export default class register extends Component {
+export default class Register extends Component {
     // 6. 设置state
     state = {
         username: '', // 用户名

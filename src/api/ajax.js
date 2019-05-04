@@ -5,7 +5,7 @@ export default function ajax(url, data = {}, type = 'GET') {
         // get方式的参数拼接：
         // {usrename: 'jack',password: '123'}
         // paramStr: usrename=jack&password=123
-        paramStr = ''
+        let paramStr = ''
         Object.keys(data).forEach(key => {
             paramStr += key + '=' + data[key] + '&'
         })
