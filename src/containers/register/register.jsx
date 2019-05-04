@@ -12,6 +12,7 @@ import {
     Button
 } from 'antd-mobile'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 // 4.1 引入Logo组件
 import Logo from '../../components/logo/logo'
@@ -47,7 +48,11 @@ class Register extends Component {
     render() {
         // 9.2.3 读state的type的值,注意书写位置,写在render里面,return外面
         const { type } = this.state
-        const { msg } = this.props.user
+        const { msg, redirectTo } = this.props.user
+        if (redirectTo) {
+            // redirectTo重定向的路由刚开始是空，登录成功后，变成 '/'，有值直接重定向，return后面的不会执行
+            return <Redirect to={redirectTo} />
+        }
         return (
             <div>
                 {/* 3. 硅谷直聘顶部导航栏 */}

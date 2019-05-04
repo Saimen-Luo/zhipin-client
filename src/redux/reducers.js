@@ -12,12 +12,13 @@ const initUser = {
     username: '', // 用户名
     type: '', // 用户类型
     msg: '', // 错误信息
+    redirectTo: '', // 重定向的路径
 }
 // 1. reducers函数
 function user(state = initUser, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return { ...action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+            return { ...action.data, redirectTo: '/' } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         case ERR_MESSAGE:
             return { ...state, msg: action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         default:
