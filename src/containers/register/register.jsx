@@ -20,7 +20,7 @@ import { register } from '../../redux/actions'
 // 2. ListItem是List中的Item
 const ListItem = List.Item
 
-export default class Register extends Component {
+class Register extends Component {
     // 6. 设置state
     state = {
         username: '', // 用户名
@@ -30,7 +30,7 @@ export default class Register extends Component {
         type: 'employee', // 用户类型 boss/employee 
     }
     register = () => {
-        console.log(this.state);
+        this.props.register(this.state)
 
     }
     // 8. handleChange函数,[name]要加中括号取变量的值, setState
@@ -90,3 +90,8 @@ export default class Register extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({}),
+    {register}
+)(Register)

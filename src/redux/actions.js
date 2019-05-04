@@ -15,8 +15,10 @@ const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user })
 const errMessage = (msg) => ({ type: ERR_MESSAGE, data: msg })
 
 export const register = (user) => {
+    const { username, password, password2, type } = user
     return async dispatch => {
-        const response = await reqRegister(user)
+        // 不传递password2，后台不需要
+        const response = await reqRegister({ username, password, type })
         const result = response.data
         if (result.code === 0) {
             // 分发授权成功的同步action
