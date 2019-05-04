@@ -10,6 +10,8 @@ import { Provider } from 'react-redux'
 // 2. 引入store
 import store from './redux/store'
 
+import './assets/css/index.less'
+
 ReactDom.render((
     // 3. 把路由器放到Provider中,Provider传递store属性
     <Provider store={store}>

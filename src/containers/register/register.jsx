@@ -47,6 +47,7 @@ class Register extends Component {
     render() {
         // 9.2.3 读state的type的值,注意书写位置,写在render里面,return外面
         const { type } = this.state
+        const { msg } = this.props.user
         return (
             <div>
                 {/* 3. 硅谷直聘顶部导航栏 */}
@@ -57,6 +58,7 @@ class Register extends Component {
                 <WingBlank>
                     {/* 5.1 嵌套List */}
                     <List>
+                        {msg ? <div className='err-msg'>{msg}</div> : null}
                         {/* 5.2 嵌套InputItem */}
                         <WhiteSpace />
                         {/* 7. 各个state元素的onChange事件,参考文档 会传递一个value,变化的值; 交给handleChange */}
@@ -92,6 +94,6 @@ class Register extends Component {
 }
 
 export default connect(
-    state => ({}),
-    {register}
+    state => ({ user: state.user }),
+    { register }
 )(Register)
