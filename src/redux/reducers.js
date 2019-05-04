@@ -3,19 +3,31 @@
 // 3. 从redux引入combineReducers函数
 import { combineReducers } from 'redux'
 
-// 1. reducers函数
-function xxx(state=0,action) {
-    return state
-}
+import {
+    AUTH_SUCCESS,
+    ERR_MESSAGE
+} from './action-types'
 
-function yyy(state=0,action) {
-    return state
+const initUser = {
+    username: '', // 用户名
+    type: '', // 用户类型
+    msg: '', // 错误信息
+}
+// 1. reducers函数
+function user(state = initUser, action) {
+    switch (action.type) {
+        case AUTH_SUCCESS:
+            return { ...state, ...action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+        case ERR_MESSAGE:
+            return { ...state, msg: action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+        default:
+            return state
+    }
 }
 
 // 2. 向外暴露组合后的reducers对象
 export default combineReducers({
-    xxx,
-    yyy
+    user
 })
 
-// 向外暴露状态的结构 {xxx:0, yyy:0}
+// 向外暴露状态的结构 {user:{}}
