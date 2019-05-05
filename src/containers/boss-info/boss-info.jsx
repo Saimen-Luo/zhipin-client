@@ -13,20 +13,25 @@ class BossInfo extends Component {
         company: '', // 公司名称
         salary: '' // 工资
     }
-    handleChange = (name,val) => {
+    handleChange = (name, val) => {
         this.setState({
-            [name]:val
+            [name]: val
         })
     }
-    save= ()=> {
+    save = () => {
         console.log(this.state);
-        
+
+    }
+    setHeader = (header) => {
+        this.setState({
+            header
+        })
     }
     render() {
         return (
             <div>
                 <NavBar>老板信息完善</NavBar>
-                <HeaderSelector />
+                <HeaderSelector setHeader={this.setHeader} />
                 <InputItem onChange={val => { this.handleChange('post', val) }}>招聘职位：</InputItem>
                 <InputItem onChange={val => { this.handleChange('company', val) }}>公司名称：</InputItem>
                 <InputItem onChange={val => { this.handleChange('salary', val) }}>职位薪资：</InputItem>
