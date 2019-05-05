@@ -8,6 +8,8 @@ import {
     ERR_MESSAGE
 } from './action-types'
 
+import { getRedirectTo } from '../utils'
+
 const initUser = {
     username: '', // 用户名
     type: '', // 用户类型
@@ -18,7 +20,8 @@ const initUser = {
 function user(state = initUser, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return { ...action.data, redirectTo: '/' } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+            const { type, header } = action.data
+            return { ...action.data, redirectTo: getRedirectTo(type, header) } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         case ERR_MESSAGE:
             return { ...state, msg: action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         default:
