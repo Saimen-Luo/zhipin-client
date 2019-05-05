@@ -5,7 +5,9 @@ import { combineReducers } from 'redux'
 
 import {
     AUTH_SUCCESS,
-    ERR_MESSAGE
+    ERR_MESSAGE,
+    RECEIVE_USER,
+    RESET_USER
 } from './action-types'
 
 import { getRedirectTo } from '../utils'
@@ -24,6 +26,10 @@ function user(state = initUser, action) {
             return { ...action.data, redirectTo: getRedirectTo(type, header) } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
         case ERR_MESSAGE:
             return { ...state, msg: action.data } // state和action.data里面的属性相同，后面的把前面的覆盖掉了。
+        case RECEIVE_USER:
+            return action.data // data是user
+        case RESET_USER:
+            return { ...initUser, msg: action.data } // 返回initUser（重制，清除了_id，就可以判断用户没有登录） 和错误信息
         default:
             return state
     }
