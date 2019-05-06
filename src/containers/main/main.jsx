@@ -3,17 +3,57 @@ import React, { Component } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Cookies from 'js-cookie'
+import { NavBar } from 'antd-mobile'
 
 import BossInfo from '../boss-info/boss-info'
 import EmployeeInfo from '../employee-info/employee-info'
+import Boss from '../boss/boss'
+import Employee from '../employee/employee'
+import Message from '../message/message'
+import Personal from '../personal/personal'
+import NoFound from '../../components/no-found/no-found'
+
 import { getRedirectTo } from '../../utils'
 import { getUser } from '../../redux/actions'
 
 class Main extends Component {
+    // 给数组对象添加属性
+    // 包含所有导航组件的相关信息
+    navList = [
+        {
+            path: '/boss', // 路由路径
+            component: Boss,
+            title: ' 大神列表',
+            icon: 'dashen',
+            text: ' 大神',
+        },
+        {
+            path: '/employee', // 路由路径
+            component: Employee,
+            title: ' 老板列表',
+            icon: 'laoban',
+            text: ' 老板',
+        },
+        {
+            path: '/message', // 路由路径
+            component: Message,
+            title: ' 消息列表',
+            icon: 'message',
+            text: ' 消息',
+        },
+        {
+            path: '/personal', // 路由路径
+            component: Personal,
+            title: ' 用户中心',
+            icon: 'personal',
+            text: ' 个人',
+        }
+    ]
     componentDidMount() {
         // 如果cookie中有userId(登录过)，但没登录（redux中没有_id），发请求获取对应的user
         const userId = Cookies.get('userId')
         const { _id } = this.props.user
+        /* todo */
         if (userId && !_id) {
             this.props.getUser()
         }
@@ -54,11 +94,21 @@ class Main extends Component {
             // 通过_id判断用户是否登录，无_id则重定向到登录界面；适用于用户未登录通过地址访问其他路由 和 cookies被删除等情况
             return <Redirect to='login' />
         } */
+
+        const { navList } = this
+        const path = this.props.location.pathname // 请求的路径
+        const currentNav = navList.find(nav => nav.path === path) // 得到与navList匹配的路径，可能没有
+
         return (
             <div>
+                {currentNav ? <NavBar>{currentNav.title}</NavBar> : null}
                 <Switch>
+                    {
+                        navList.map((nav, index) => <Route path={nav.path} component={nav.component} key={index}></Route>)
+                    }
                     <Route path='/bossinfo' component={BossInfo}></Route>
                     <Route path='/employeeinfo' component={EmployeeInfo}></Route>
+                    <Route component={NoFound}></Route>
                 </Switch>
             </div>
         )
