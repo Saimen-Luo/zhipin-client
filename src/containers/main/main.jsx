@@ -7,13 +7,16 @@ import Cookies from 'js-cookie'
 import BossInfo from '../boss-info/boss-info'
 import EmployeeInfo from '../employee-info/employee-info'
 import { getRedirectTo } from '../../utils'
+import { getUser } from '../../redux/actions'
 
 class Main extends Component {
     componentDidMount() {
         // 如果cookie中有userId(登录过)，但没登录（redux中没有_id），发请求获取对应的user
         const userId = Cookies.get('userId')
         const { _id } = this.props.user
-        /* todo */
+        if (userId && !_id) {
+            this.props.getUser()
+        }
 
 
 
@@ -23,6 +26,8 @@ class Main extends Component {
         const userId = Cookies.get('userId')
 
         // 如果没有userId，重定向到login
+        // 后台登录路由需要返回 userId cookie，否则会造成login死循环
+        // Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
         if (!userId) {
             return <Redirect to='login' />
         }
@@ -61,7 +66,8 @@ class Main extends Component {
 }
 
 export default connect(
-    state => ({ user: state.user })
+    state => ({ user: state.user }),
+    { getUser }
 )(Main)
 
 /*

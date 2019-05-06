@@ -3,7 +3,7 @@
 同步action
 异步action
 */
-import { reqRegister, reqLogin, reqUpdate } from '../api'
+import { reqRegister, reqLogin, reqUpdate, reqUser } from '../api'
 import {
     AUTH_SUCCESS,
     ERR_MESSAGE,
@@ -84,5 +84,18 @@ export const updateUser = (user) => {
             dispatch(resetUser(result.msg))
         }
 
+    }
+}
+
+// 获取用户异步action
+export const getUser = () => {
+    return async dispatch => {
+        const response = await reqUser()
+        const result = response.data
+        if (result.code === 0) {
+            dispatch(recieveUser(result.data))
+        } else {
+            dispatch(resetUser(result.msg))
+        }
     }
 }
