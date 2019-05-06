@@ -12,6 +12,7 @@ import Employee from '../employee/employee'
 import Message from '../message/message'
 import Personal from '../personal/personal'
 import NoFound from '../../components/no-found/no-found'
+import NavFooter from '../../components/nav-footer/nav-footer'
 
 import { getRedirectTo } from '../../utils'
 import { getUser } from '../../redux/actions'
@@ -24,14 +25,14 @@ class Main extends Component {
             path: '/boss', // 路由路径
             component: Boss,
             title: ' 大神列表',
-            icon: 'dashen',
+            icon: 'employee',
             text: ' 大神',
         },
         {
             path: '/employee', // 路由路径
             component: Employee,
             title: ' 老板列表',
-            icon: 'laoban',
+            icon: 'boss',
             text: ' 老板',
         },
         {
@@ -110,6 +111,7 @@ class Main extends Component {
                     <Route path='/employeeinfo' component={EmployeeInfo}></Route>
                     <Route component={NoFound}></Route>
                 </Switch>
+                {currentNav ? <NavFooter navList={navList} /> : null}
             </div>
         )
     }
