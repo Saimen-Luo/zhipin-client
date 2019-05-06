@@ -100,6 +100,18 @@ class Main extends Component {
         const path = this.props.location.pathname // 请求的路径
         const currentNav = navList.find(nav => nav.path === path) // 得到与navList匹配的路径，可能没有
 
+        /* 决定哪个路由隐藏
+            如果usere.type为 boss，第2个隐藏
+            如果usere.type为 employee，第1个隐藏
+        */
+        if (currentNav) {
+            if (user.type === 'boss') {
+                navList[1].hide = true
+            } else {
+                navList[0].hide = true
+            }
+        }
+
         return (
             <div>
                 {currentNav ? <NavBar>{currentNav.title}</NavBar> : null}
