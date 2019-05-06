@@ -27,7 +27,7 @@ export default class HeaderSelector extends Component {
             this.headerList.push({
                 text: `头像${i + 1}`,
                 // webpack支持commonjs
-                icon: require(`./images/头像${i + 1}.png`)
+                icon: require(`../../assets/images/头像${i + 1}.png`)
             })
         }
     }
