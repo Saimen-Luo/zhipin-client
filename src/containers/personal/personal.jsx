@@ -1,12 +1,29 @@
 // Personal组件
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Result, List, WhiteSpace, Button } from 'antd-mobile'
+import { Result, List, WhiteSpace, Button, Modal } from 'antd-mobile'
+import Cookies from 'js-cookie'
+
+import { resetUser } from '../../redux/actions'
 
 const Item = List.Item
 const Brief = Item.Brief
 
 class Personal extends Component {
+    logout = () => {
+        Modal.alert('退出', '确认退出登录吗？', [
+            { text: '取消' },
+            {
+                text: '确定',
+                onPress: () => {
+                    // 删除cookie中的userId
+                    Cookies.remove('userId')
+                    // 删除redux管理的user
+                    this.props.resetUser()
+                }
+            }
+        ])
+    }
     render() {
         const { username, info, salary, header, company, post } = this.props.user
         return (
@@ -27,7 +44,7 @@ class Personal extends Component {
                 </List>
                 <WhiteSpace />
                 <List>
-                    <Button type='warning'>退出登录</Button>
+                    <Button type='warning' onClick={this.logout}>退出登录</Button>
                 </List>
             </div>
         )
@@ -36,5 +53,5 @@ class Personal extends Component {
 
 export default connect(
     state => ({ user: state.user }),
-    {}
+    { resetUser }
 )(Personal)
