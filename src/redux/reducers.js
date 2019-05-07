@@ -7,7 +7,8 @@ import {
     AUTH_SUCCESS,
     ERR_MESSAGE,
     RECEIVE_USER,
-    RESET_USER
+    RESET_USER,
+    RECEIVE_USER_LIST
 } from './action-types'
 
 import { getRedirectTo } from '../utils'
@@ -35,9 +36,20 @@ function user(state = initUser, action) {
     }
 }
 
+// 产生userList状态的reducer
+function userList(state = [], action) {
+    switch (action.type) {
+        case RECEIVE_USER_LIST:
+            return action.data
+        default:
+            return state
+    }
+}
+
 // 2. 向外暴露组合后的reducers对象
 export default combineReducers({
-    user
+    user,
+    userList
 })
 
 // 向外暴露状态的结构 {user:{}}

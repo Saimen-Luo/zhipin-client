@@ -14,3 +14,6 @@ export const reqUpdate = (user) => ajax('/update', user, "POST")
 
 // 获取用户信息接口
 export const reqUser = () => ajax('/user')
+
+// 获取指定类型的用户列表
+export const reqUserList = (type) => ajax('/userlist', { type })

@@ -10,7 +10,7 @@ export default function ajax(url, data = {}, type = 'GET') {
             paramStr += key + '=' + data[key] + '&'
         })
         if (paramStr) {
-            paramStr.subString(0, paramStr.length - 1)
+            paramStr.substring(0, paramStr.length - 1)
         }
         return axios.get(url + '?' + paramStr)
 
