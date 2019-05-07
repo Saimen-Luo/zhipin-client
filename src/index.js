@@ -12,6 +12,9 @@ import store from './redux/store'
 
 import './assets/css/index.less'
 
+// 引入socket.io
+import './test/test'
+
 ReactDom.render((
     // 3. 把路由器放到Provider中,Provider传递store属性
     <Provider store={store}>
