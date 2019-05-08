@@ -13,6 +13,7 @@ import Message from '../message/message'
 import Personal from '../personal/personal'
 import NoFound from '../../components/no-found/no-found'
 import NavFooter from '../../components/nav-footer/nav-footer'
+import Chat from '../chat/chat'
 
 import { getRedirectTo } from '../../utils'
 import { getUser } from '../../redux/actions'
@@ -121,6 +122,7 @@ class Main extends Component {
                     }
                     <Route path='/bossinfo' component={BossInfo}></Route>
                     <Route path='/employeeinfo' component={EmployeeInfo}></Route>
+                    <Route path='/chat/:userId' component={Chat}></Route>
                     <Route component={NoFound}></Route>
                 </Switch>
                 {currentNav ? <NavFooter navList={navList} /> : null}
