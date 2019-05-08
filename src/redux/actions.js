@@ -3,6 +3,7 @@
 同步action
 异步action
 */
+import io from 'socket.io-client'
 import { reqRegister, reqLogin, reqUpdate, reqUser, reqUserList } from '../api'
 import {
     AUTH_SUCCESS,
@@ -111,5 +112,28 @@ export const getUserList = (type) => {
         if (result.code === 0) {
             dispatch(receiveUserList(result.data))
         }
+    }
+}
+
+function initIO() {
+    /* 实现单例：
+        1. 创建之前判断，只有没有创建过才创建
+        2. 创建之后，保存
+    */
+    if (!io.socket) {
+        io.socket = io('ws://localhost:4000')
+
+        io.socket.on('receiveMsg', function (chatMsg) {
+            console.log('客户端收到服务端发送的消息', chatMsg)
+        })
+    }
+}
+
+// 发送消息异步action
+export const sendMsg = ({ from, to, content }) => {
+    return dispatch => {
+        console.log('客户端向服务端发送消息', { from, to, content })
+        initIO()
+        io.socket.emit('sendMsg', { from, to, content })
     }
 }
