@@ -36,6 +36,7 @@ const receiveUserList = (userList) => ({ type: RECEIVE_USER_LIST, data: userList
 // 接收消息列表的同步action
 const receiveMsgList = ({ chatMsgs, users }) => ({ type: RECEIVE_MSG_LIST, data: { chatMsgs, users } })
 // 接收一条消息的同步action
+const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg })
 
 // 注册异步action
 export const register = (user) => {
@@ -55,7 +56,7 @@ export const register = (user) => {
         const response = await reqRegister({ username, password, type })
         const result = response.data
         if (result.code === 0) {
-            getMsgList(dispatch)
+            getMsgList(dispatch, result.data._id)
             // 分发授权成功的同步action
             dispatch(authSuccess(result.data))
         } else {
@@ -81,7 +82,7 @@ export const login = (user) => {
         const response = await reqLogin({ username, password })
         const result = response.data
         if (result.code === 0) {
-            getMsgList(dispatch)
+            getMsgList(dispatch, result.data._id)
             // 分发授权成功的同步action
             dispatch(authSuccess(result.data))
         } else {
@@ -112,7 +113,7 @@ export const getUser = () => {
         const response = await reqUser()
         const result = response.data
         if (result.code === 0) {
-            getMsgList(dispatch)
+            getMsgList(dispatch, result.data._id)
             dispatch(recieveUser(result.data))
         } else {
             dispatch(resetUser(result.msg))
@@ -131,7 +132,7 @@ export const getUserList = (type) => {
     }
 }
 
-function initIO() {
+function initIO(dispatch, userId) {
     /* 实现单例：
         1. 创建之前判断，只有没有创建过才创建
         2. 创建之后，保存
@@ -141,6 +142,10 @@ function initIO() {
 
         io.socket.on('receiveMsg', function (chatMsg) {
             console.log('客户端收到服务端发送的消息', chatMsg)
+            // 只分发同步action保存与当前用户相关的消息
+            if (userId === chatMsg.from || userId === chatMsg.to) {
+                dispatch(receiveMsg(chatMsg))
+            }
         })
     }
 }
@@ -154,8 +159,8 @@ export const sendMsg = ({ from, to, content }) => {
 }
 
 // 获取消息列表的异步工具函数
-async function getMsgList(dispatch) {
-    initIO()
+async function getMsgList(dispatch, userId) {
+    initIO(dispatch, userId)
     const response = await reqChatMsgList()
     const result = response.data
     if (result.code === 0) {
