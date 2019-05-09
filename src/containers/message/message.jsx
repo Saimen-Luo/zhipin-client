@@ -6,10 +6,16 @@ const Item = List.Item
 const Brief = Item.Brief
 
 /* 得到每个组的lastMsg组成的数组 */
-function getLastMsgs(chatMsgs) {
+function getLastMsgs(chatMsgs, userId) {
     // 找出每组聊天的lastMsg，并用一个容器对象来保存 {chat_id:lastMsg}
     const lastMsgObjs = {}
     chatMsgs.forEach(msg => {
+        if (msg.to === userId && !msg.read) {
+            msg.unReadCount = 1
+        } else {
+            msg.unReadCount = 0
+        }
+
         // 得到msg的标识id
         const chatId = msg.chat_id
         // 获取已保存的当前chaiId组的lastMsg
@@ -17,9 +23,11 @@ function getLastMsgs(chatMsgs) {
         if (!lastMsg) { // 如果没有，保存
             lastMsgObjs[chatId] = msg
         } else {
+            const unReadCount = lastMsg.unReadCount + msg.unReadCount
             if (msg.create_time > lastMsg.create_time) {
                 lastMsgObjs[chatId] = msg
             }
+            lastMsgObjs[chatId].unReadCount = unReadCount
         }
     })
     // 得到所有lastMsg的数组
@@ -38,7 +46,7 @@ class Message extends Component {
         const { users, chatMsgs } = this.props.chat
 
         // 对chatMsgs进行分组，按chat_id分组
-        const lastMsgs = getLastMsgs(chatMsgs)
+        const lastMsgs = getLastMsgs(chatMsgs, user._id)
 
         return (
             <List style={{ marginBottom: 50, marginTop: 50 }}>
@@ -48,7 +56,7 @@ class Message extends Component {
                     return (
                         <Item
                             key={msg._id}
-                            extra={<Badge text={0} />}
+                            extra={<Badge text={msg.unReadCount} />}
                             thumb={targetUser.header ? require(`../../assets/images/${targetUser.header}.png`) : null}
                             arrow='horizontal'
                             onClick={() => this.props.history.push(`/chat/${targetUserId}`)}
