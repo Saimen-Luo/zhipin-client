@@ -2,7 +2,7 @@
 对话聊天的路由组件
 */
 import React, { Component } from 'react'
-import { NavBar, List, InputItem, Grid } from 'antd-mobile'
+import { NavBar, List, InputItem, Grid, Icon } from 'antd-mobile'
 import { connect } from 'react-redux'
 
 import { sendMsg } from '../../redux/actions'
@@ -50,6 +50,15 @@ class Chat extends Component {
         }
     }
 
+    componentDidMount() {
+        // 初始显示列表 自动滑倒最底部
+        window.scrollTo(0, document.body.scrollHeight)
+    }
+    componentDidUpdate() {
+        // 更新显示列表 自动滑倒最底部
+        window.scrollTo(0, document.body.scrollHeight)
+    }
+
     render() {
         const { user } = this.props
         const { users, chatMsgs } = this.props.chat
@@ -71,8 +80,18 @@ class Chat extends Component {
 
         return (
             <div id='chat-page'>
-                <NavBar>aa</NavBar>
-                <List>
+                <NavBar
+                    // 添加返回图标
+                    icon={<Icon type='left' />}
+                    // 固定Navbar
+                    className='sticky-header'
+                    // 点击左边图标返回
+                    onLeftClick={() => this.props.history.goBack()}
+                >
+                    {users[targetId].username}
+                </NavBar>
+                {/* 使消息不被盖住 */}
+                <List style={{ marginTop: 50, marginBottom: 50 }}>
                     {
                         msgs.map(msg => {
                             if (targetId === msg.from) { // 别人发给我的
