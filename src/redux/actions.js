@@ -4,13 +4,23 @@
 异步action
 */
 import io from 'socket.io-client'
-import { reqRegister, reqLogin, reqUpdate, reqUser, reqUserList } from '../api'
+import {
+    reqRegister,
+    reqLogin,
+    reqUpdate,
+    reqUser,
+    reqUserList,
+    reqChatMsgList,
+    reqReadMsg
+} from '../api'
 import {
     AUTH_SUCCESS,
     ERR_MESSAGE,
     RECEIVE_USER,
     RESET_USER,
-    RECEIVE_USER_LIST
+    RECEIVE_USER_LIST,
+    RECEIVE_MSG_LIST,
+    RECEIVE_MSG
 } from './action-types'
 
 // 授权成功的同步action
@@ -23,6 +33,9 @@ const recieveUser = (user) => ({ type: RECEIVE_USER, data: user })
 export const resetUser = (msg) => ({ type: RESET_USER, data: msg })
 // 接收用户列表的同步action
 const receiveUserList = (userList) => ({ type: RECEIVE_USER_LIST, data: userList })
+// 接收消息列表的同步action
+const receiveMsgList = ({ chatMsgs, users }) => ({ type: RECEIVE_MSG_LIST, data: { chatMsgs, users } })
+// 接收一条消息的同步action
 
 // 注册异步action
 export const register = (user) => {
@@ -42,6 +55,7 @@ export const register = (user) => {
         const response = await reqRegister({ username, password, type })
         const result = response.data
         if (result.code === 0) {
+            getMsgList(dispatch)
             // 分发授权成功的同步action
             dispatch(authSuccess(result.data))
         } else {
@@ -67,6 +81,7 @@ export const login = (user) => {
         const response = await reqLogin({ username, password })
         const result = response.data
         if (result.code === 0) {
+            getMsgList(dispatch)
             // 分发授权成功的同步action
             dispatch(authSuccess(result.data))
         } else {
@@ -97,6 +112,7 @@ export const getUser = () => {
         const response = await reqUser()
         const result = response.data
         if (result.code === 0) {
+            getMsgList(dispatch)
             dispatch(recieveUser(result.data))
         } else {
             dispatch(resetUser(result.msg))
@@ -133,7 +149,19 @@ function initIO() {
 export const sendMsg = ({ from, to, content }) => {
     return dispatch => {
         console.log('客户端向服务端发送消息', { from, to, content })
-        initIO()
         io.socket.emit('sendMsg', { from, to, content })
+    }
+}
+
+// 获取消息列表的异步工具函数
+async function getMsgList(dispatch) {
+    initIO()
+    const response = await reqChatMsgList()
+    const result = response.data
+    if (result.code === 0) {
+        const { chatMsgs, users } = result.data
+        // 分发同步action
+        dispatch(receiveMsgList({ chatMsgs, users }))
+
     }
 }
