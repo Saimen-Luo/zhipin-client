@@ -10,7 +10,8 @@ import {
     RESET_USER,
     RECEIVE_USER_LIST,
     RECEIVE_MSG,
-    RECEIVE_MSG_LIST
+    RECEIVE_MSG_LIST,
+    MSG_READ
 } from './action-types'
 
 import { getRedirectTo } from '../utils'
@@ -72,6 +73,19 @@ function chat(state = initChat, action) {
                 users: state.users,
                 chatMsgs: [...state.chatMsgs, chatMsg],
                 unReadCount: state.unReadCount + (!chatMsg.read && chatMsg.to === action.data.userId ? 1 : 0)
+            }
+        case MSG_READ:
+            const { count, from, to } = action.data
+            return {
+                users: state.users,
+                chatMsgs: state.chatMsgs.map(msg => {
+                    if (msg.from === from && msg.to === to && !msg.read) { // 需要更新
+                        return { ...msg, read: true }
+                    } else { // 不需要更新
+                        return msg
+                    }
+                }),
+                unReadCount: state.unReadCount - count
             }
         default:
             return state
