@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import { NavBar, List, InputItem, Grid, Icon } from 'antd-mobile'
 import { connect } from 'react-redux'
+import QueueAnim from 'rc-queue-anim'
 
 import { sendMsg, readMsg } from '../../redux/actions'
 
@@ -99,23 +100,25 @@ class Chat extends Component {
                 </NavBar>
                 {/* 使消息不被盖住 */}
                 <List style={{ marginTop: 50, marginBottom: 50 }}>
-                    {
-                        msgs.map(msg => {
-                            if (targetId === msg.from) { // 别人发给我的
-                                return (
-                                    <Item thumb={targetIcon} key={msg._id}>
-                                        {msg.content}
-                                    </Item>
-                                )
-                            } else { // 我发给别人的
-                                return (
-                                    <Item className='chat-me' extra=' 我' key={msg._id}>
-                                        {msg.content}
-                                    </Item>
-                                )
-                            }
-                        })
-                    }
+                    <QueueAnim type='alpha'>
+                        {
+                            msgs.map(msg => {
+                                if (targetId === msg.from) { // 别人发给我的
+                                    return (
+                                        <Item thumb={targetIcon} key={msg._id}>
+                                            {msg.content}
+                                        </Item>
+                                    )
+                                } else { // 我发给别人的
+                                    return (
+                                        <Item className='chat-me' extra=' 我' key={msg._id}>
+                                            {msg.content}
+                                        </Item>
+                                    )
+                                }
+                            })
+                        }
+                    </QueueAnim>
 
 
 
