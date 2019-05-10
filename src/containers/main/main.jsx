@@ -75,7 +75,7 @@ class Main extends Component {
         }
 
         // 如果有userId，读取redux中的user状态
-        const { user } = this.props
+        const { user, unReadCount } = this.props
         // 如果redux没有_id，返回null 不做任何显示
         if (!user._id) {
             return null
@@ -125,14 +125,14 @@ class Main extends Component {
                     <Route path='/chat/:userId' component={Chat}></Route>
                     <Route component={NoFound}></Route>
                 </Switch>
-                {currentNav ? <NavFooter navList={navList} /> : null}
+                {currentNav ? <NavFooter navList={navList} unReadCount={unReadCount} /> : null}
             </div>
         )
     }
 }
 
 export default connect(
-    state => ({ user: state.user }),
+    state => ({ user: state.user, unReadCount: state.chat.unReadCount }),
     { getUser }
 )(Main)
 

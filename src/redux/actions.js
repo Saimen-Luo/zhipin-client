@@ -34,9 +34,9 @@ export const resetUser = (msg) => ({ type: RESET_USER, data: msg })
 // 接收用户列表的同步action
 const receiveUserList = (userList) => ({ type: RECEIVE_USER_LIST, data: userList })
 // 接收消息列表的同步action
-const receiveMsgList = ({ chatMsgs, users }) => ({ type: RECEIVE_MSG_LIST, data: { chatMsgs, users } })
+const receiveMsgList = ({ chatMsgs, users, userId }) => ({ type: RECEIVE_MSG_LIST, data: { chatMsgs, users, userId } })
 // 接收一条消息的同步action
-const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg })
+const receiveMsg = ({ chatMsg, userId }) => ({ type: RECEIVE_MSG, data: { chatMsg, userId } })
 
 // 注册异步action
 export const register = (user) => {
@@ -144,7 +144,7 @@ function initIO(dispatch, userId) {
             console.log('客户端收到服务端发送的消息', chatMsg)
             // 只分发同步action保存与当前用户相关的消息
             if (userId === chatMsg.from || userId === chatMsg.to) {
-                dispatch(receiveMsg(chatMsg))
+                dispatch(receiveMsg({ chatMsg, userId }))
             }
         })
     }
@@ -166,7 +166,7 @@ async function getMsgList(dispatch, userId) {
     if (result.code === 0) {
         const { chatMsgs, users } = result.data
         // 分发同步action
-        dispatch(receiveMsgList({ chatMsgs, users }))
+        dispatch(receiveMsgList({ chatMsgs, users, userId }))
 
     }
 }
