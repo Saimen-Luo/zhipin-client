@@ -142,7 +142,7 @@ function initIO(dispatch, userId) {
         2. 创建之后，保存
     */
     if (!io.socket) {
-        io.socket = io('ws://localhost:4000')
+        io.socket = io('ws://react.learningpurpose.ml:8080')
 
         io.socket.on('receiveMsg', function (chatMsg) {
             console.log('客户端收到服务端发送的消息', chatMsg)
